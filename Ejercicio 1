@@ -1,0 +1,34 @@
+/*Realizar un sistema en Tinkercad que comunique dos Arduino UNO 
+de manera tal que: Un arduino le diga al otro "hola", y este le 
+responda "cómo estás?"*/
+
+/*ARDUINO 1*/ 
+
+char hola;
+void setup()
+{
+  Serial.begin(9600);
+}
+
+void loop()
+{
+  Serial.println("Holi");
+  delay(1000);
+} 
+
+
+/*ARDUINO 2*/ 
+
+char dato;
+
+void setup(){
+  Serial.begin(9600);
+}
+
+void loop(){ 
+  if(Serial.available()){
+    dato = Serial.read();
+    Serial.println("Como estas?");
+  }
+  delay(1000);
+}
