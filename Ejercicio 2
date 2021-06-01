@@ -1,0 +1,59 @@
+/*Un arduino mida distancia con el sensor ultrasónico y le envíe 
+este dato al otro Arduino. Si la distancia es mayor a 150cm, el 
+segundo arduino enciende un LED rojo.*/ 
+
+/*ARDUINO 1*/
+
+int distancia = 0;
+
+long readUltrasonicDistance(int triggerPin, int echoPin){
+  pinMode(triggerPin, OUTPUT); 
+  digitalWrite(triggerPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(triggerPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(triggerPin, LOW);
+  pinMode(echoPin, INPUT);
+  return pulseIn(echoPin, HIGH);
+}
+
+void setup(){
+  Serial.begin(9600);
+}
+
+void loop(){
+  distancia = 0.01723 * readUltrasonicDistance(11, 10);
+  Serial.println(distancia);
+  delay(1000); 
+}
+
+
+
+
+/*----------*/
+/*ARDUINO 2*/
+
+String distancia;
+char c;
+
+void setup(){
+  Serial.begin(9600);
+  pinMode(13, OUTPUT);
+}
+
+void loop(){
+  while(Serial.available()>0){
+    c=Serial.read();
+    distancia+=c;
+  }
+  
+  Serial.println(distancia.toInt());
+   if(distancia.toInt() < 150){
+     digitalWrite(13, LOW);
+   }
+  else{
+    digitalWrite(13, HIGH);
+  }
+  delay(1000);
+  distancia = "";
+}
